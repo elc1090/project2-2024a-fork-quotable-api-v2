@@ -1,43 +1,62 @@
-# Projeto Frontend Incrível
+# Projeto: Consumindo uma API pública
 
-Bem-vindo ao Projeto Frontend Incrível! Este é um projeto incrível que visa revolucionar a experiência do usuário na web.
+> 1. Baixe este arquivo e edite o texto em formato Markdown conforme as instruções a seguir.
+> 2. Substitua todos os trechos de texto iniciados com "Substitua" por informações do seu projeto, conforme solicitado em cada trecho.
+> 3. Substitua a imagem por um screenshot do projeto (arquivo pode ser armazenado no repositório ou em URL externa). GIFs animados também são permitidos!
+> 4. Remova todas as instruções de entrega.
+> 5. Double-check: Certifique-se de que seu README.md não contenha instruções de entrega!
+> 6. Entregue este README.md dentro da pasta raiz do repositório de entrega.
+> Opcional: é permitido alterar a formatação do README, desde que sejam mantidas todas as informações solicitadas (tudo bem adicionar mais informações)
 
-## Visão Geral
+![Substitua a imagem ao lado por um screenshot do seu projeto](https://mdswanson.com/static/chops-ux-step-4.png "Screenshot do projeto")
 
-O Projeto Frontend Incrível é uma aplicação web moderna desenvolvida com as mais recentes tecnologias frontend. Ele fornece uma interface intuitiva e elegante para os usuários interagirem com os recursos oferecidos.
 
-## Funcionalidades Principais
+Acesso: Substitua este texto pela URL de deploy do projeto
 
-- **Interface Intuitiva:** Uma interface de usuário limpa e intuitiva para uma experiência de uso sem esforço.
-- **Recursos Poderosos:** Oferece uma variedade de recursos poderosos para atender às necessidades dos usuários.
-- **Responsivo:** Totalmente responsivo em dispositivos de diferentes tamanhos, garantindo uma experiência consistente em todos os lugares.
 
-## Pré-requisitos
+### Desenvolvedores
+Substitua este texto pela identificação da dupla: nomes e cursos
 
-Antes de começar, certifique-se de ter instalado o seguinte:
 
-- Node.js
-- npm ou Yarn
+### Nosso produto
 
-## Instalação
+Substitua este texto por uma descrição do que foi produzido: funcionalidades e relação com a temática "Conhecimento"
 
-Siga estas etapas para configurar o projeto em sua máquina local:
 
-1. Clone este repositório.
-2. Navegue até o diretório do projeto.
-3. Execute `npm install` ou `yarn install` para instalar as dependências.
-4. Execute `npm start` ou `yarn start` para iniciar o servidor de desenvolvimento.
+#### API escolhida
 
-## Contribuição
 
-Estamos abertos a contribuições! Se você quiser contribuir para o Projeto Frontend Incrível, siga estas etapas:
+Substitua este texto por informações sobre a API escolhida, incluindo URL com documentação e exemplos de endpoints.
 
-1. Fork este repositório.
-2. Crie uma nova branch (`git checkout -b feature/sua-feature`).
-3. Faça commit das suas alterações (`git commit -am 'Adicione uma nova feature'`).
-4. Faça push para a branch (`git push origin feature/sua-feature`).
-5. Crie um novo Pull Request.
 
-## Contato
 
-Se você tiver alguma dúvida ou sugestão, entre em contato conosco em [seu-email@exemplo.com](mailto:seu-email@exemplo.com).
+
+### Desenvolvimento
+
+Substitua este texto por uma descrição do processo de desenvolvimento, explicando decisões tomadas e etapas do trabalho.
+
+
+#### Tecnologias
+
+Substitua este trecho por uma lista detalhada de tecnologias usadas (tanto as básicas, como HTML e CSS, como as mais específicas, por exemplo algum framework para frontend, etc.):
+- ...
+- ...
+- 
+
+#### Ambiente de desenvolvimento
+
+Substitua este trecho por uma lista detalhada dos ambientes/ferramentas de desenvolvimento utilizadas (por exemplo, VS Code + alguma extensão, etc.)
+- ...
+- ...
+
+#### Referências e créditos
+
+Substitua este trecho por uma lista bem detalhada de todo material consultado para ajudar no projeto, por exemplo:  URL de templates usados, URL de icon kits usados, créditos para colegas que colaboraram, geradores de código (incluindo alguns prompts usados para o ChatGPT, se for o caso)
+- ...
+- ...
+
+
+
+
+---
+Projeto entregue para a disciplina de [Desenvolvimento de Software para a Web](http://github.com/andreainfufsm/elc1090-2024a) em 2024a
