@@ -1,18 +1,30 @@
 <template>
-    <div>The Welcome</div>
-    <div>
+<div class="d-flex justify-content-center mt-5">
+    <div class="input-group" style="max-width: 400px;">
+      <input v-model="pesquisa" type="text" class="form-control rounded-pill" placeholder="Pesquisar" aria-label="Pesquisar" aria-describedby="button-addon2">
+      <button class="btn btn-outline-secondary" type="button" id="button-addon2">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+</div>
+    <!-- <div>
         <button @click="shareOnInstagram">Compartilhar no Instagram</button>
         <button @click="shareOnX">Compartilhar no X</button>
         <button @click="shareOnFacebook">Compartilhar no Facebook</button>
         <button @click="shareOnWhatsApp">Compartilhar no WhatsApp</button>
         
-    </div>  
-    </template>
+    </div>   -->
+</template>
     <script setup>
-        import translate from "translate";
-        import { fetchRandomQuotes, fetchRandomListQuotes, fetchQuotesByAuthor, fetchSearchQuotes, fetchSearchAuthors } from '../services/apiService.js';
+    import { ref } from 'vue';
+    import translate from "translate";
+    import { fetchRandomQuotes, fetchRandomListQuotes, fetchQuotesByAuthor, fetchSearchQuotes, fetchSearchAuthors } from '../services/apiService.js';
         
         
+        const searchTerm = ref(''); // Variável reativa para armazenar o valor do input
+
+        console.log(searchTerm.value); // Exemplo de como acessar o valor do input
+
         async function shareOnX() {
             const resultado = await fetchQuotesByAuthor({ slug: 'albert-einstein' });
             const resultadoTraducao = await translate(resultado.results[0].bio, "pt");

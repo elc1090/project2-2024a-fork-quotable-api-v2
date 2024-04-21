@@ -8,5 +8,7 @@
 
 </script>
 <style scoped>
-
+ .App{
+  font-family: "Arial", "Helvetica", sans-serif;
+ }
 </style>
