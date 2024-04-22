@@ -1,43 +1,75 @@
 <template>
   <div>
-      <div class="input-group">
-        <label for="query">query:</label>
-        <input type="text" id="query" v-model="query">
+    <div class="input-group">
+      <label for="query">Query:</label>
+      <input type="text" id="query" v-model="query">
+    </div>
+    <button @click="search">Pesquisar</button>
+
+    <!-- Mostrar resultados -->
+    <div v-if="showResult">
+      <div v-for="(author, index) in filterResponse" :key="index">
+        <p><strong>Name:</strong> {{ author.name }}</p>
+        <p><strong>Bio:</strong> {{ author.bio }}</p>
+        <p><strong>Description:</strong> {{ author.description }}</p>
+        <p><strong>Link:</strong> <a :href="author.link" target="_blank">{{ author.link }}</a></p>
+        <hr>
       </div>
-      <button @click="search">Pesquisar</button>
-  </div>   
+    </div>
+  </div>
 </template>
+
 <script>
+import { ref } from 'vue';
+import translate from "translate";
+import { fetchSearchAuthors } from '../services/apiService';
 
-  import { ref } from 'vue';
-  import translate from "translate";
-  import { fetchSearchAuthors } from '../services/apiService';
+export default {
+  name: 'SearchAuthors',
+  setup() {
+    const limit = ref(10); // Valor padrão para limit
+    const query = ref(''); // valor da consulta
+    const filterResponse = ref([]); // Variável para armazenar os resultados filtrados
+    const showResult = ref(false); // Variável para controlar a exibição do resultado
 
-  
-  export function useSearchAuthors() {
-        const quotesResult = ref([]);  
-        const query = ref('');
-      
-        const search = async () => {
-            try {
-            const translatedTags = await translate("tecnologia", { to: 'en' });  
-            console.log(translatedTags);
+    // Função para pesquisar autores
+    const search = async () => {
+      try {
+        // Traduz o valor do campo de consulta para inglês
+        const translatedQuery = await translate(query.value, { to: 'en' });
 
-            const quotes = await fetchSearchAuthors({
-                query: query.value,
-            });
+        const response = await fetchSearchAuthors({ query: translatedQuery, limit: limit });
 
-            quotesResult.value = quotes.results;
-            console.log(quotes); // Faça algo com os resultados da pesquisa
-            
-            } catch (error) {
-            console.error('Erro ao pesquisar citações:', error);
-            }
-      };
-  
-      return { query, search };
-    }
+        console.log(response);
 
+        // Filtra a resposta para manter apenas 'bio', 'description', 'name' e 'link'
+        filterResponse.value = response.results.map(item => {
+          return {
+            bio: item.bio,
+            description: item.description,
+            name: item.name,
+            link: item.link
+          };
+        });
+
+        console.log(filterResponse.value);
+        // Define showResult como true para exibir os resultados
+        showResult.value = true;
+
+      } catch (error) {
+        console.error('Erro ao buscar autores:', error);
+      }
+    };
+
+    return {
+      limit,
+      query,
+      filterResponse,
+      showResult,
+      search
+    };
+  }
+};
 </script>
 
 <style scoped>

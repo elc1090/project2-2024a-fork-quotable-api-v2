@@ -34,9 +34,6 @@ export default {
     const author = ref('');
     const limit = ref(10); // Valor padrão para limit
 
-    // Variável para armazenar o resultado da pesquisa
-    const quotes = ref([]);
-
     // Variável para armazenar os resultados filtrados
     const filterResponse = ref([]);
 
@@ -72,7 +69,6 @@ export default {
       tags,
       author,
       limit,
-      quotes,
       filterResponse,
       showResult,
       search
