@@ -3,9 +3,17 @@
     <div class="row justify-content-center">
       <div class="col-lg-8 col-xl-6">
         <div class="text-center mb-3"> <!-- Adicionando classe text-center para centralizar o conteúdo -->
-          <div class="input-group">
-            <label for="query" class="input-group-text">Consulta:</label>
-            <input type="text" id="query" class="form-control rounded-pill" v-model="query">
+          <div class="input-group mb-3">
+            <label for="tags" class="input-group-text">Tags:</label>
+            <input type="text" id="tags" class="form-control rounded-pill" v-model="tags">
+          </div>
+          <div class="input-group mb-3">
+            <label for="author" class="input-group-text">Author:</label>
+            <input type="text" id="author" class="form-control rounded-pill" v-model="author">
+          </div>
+          <div class="input-group mb-3">
+            <label for="limit" class="input-group-text">Limit:</label>
+            <input type="number" id="limit" class="form-control rounded-pill" v-model.number="limit">
           </div>
           <button @click="search" class="btn btn-primary rounded-pill btn-sm w-25" :class="{ 'btn-loading': loading }">
             <span v-if="!loading">Pesquisar</span>
@@ -16,14 +24,15 @@
           </button>
         </div>
 
+        <!-- Mostra os resultados filtrados -->
         <div v-if="showResult" class="mt-3">
           <div class="row">
-            <div v-for="(item, index) in filterResponse" :key="index" class="col-md-6 mb-3">
+            <div v-for="(quote, index) in filterResponse" :key="index" class="col-md-6 mb-3">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-text"><strong>Author:</strong> {{ item.author }}</p>
-                  <p class="card-text"><strong>Content:</strong> {{ item.content }}</p>
-                  <button @click="copyToClipboard(item)" class="btn btn-outline-secondary btn-sm float-end">
+                  <p class="card-text"><strong>Content:</strong> {{ quote.content }}</p>
+                  <p class="card-text"><strong>Author:</strong> {{ quote.author }}</p>
+                  <button @click="copyToClipboard(quote)" class="btn btn-outline-secondary btn-sm float-end">
                     <i class="fas fa-copy"></i> Copiar
                   </button>
                 </div>
@@ -38,28 +47,32 @@
 
 <script>
 import { ref } from 'vue';
-import translate from "translate";
-import { fetchSearchQuotes } from '../services/apiService';
+import { fetchRandomQuotes } from '@/services/apiService';
 
 export default {
-  name: 'SearchAuthors',
-  setup() {
-    const limit = ref(10); // Valor padrão para limit
-    const query = ref(''); // valor da consulta
-    const filterResponse = ref([]); // Variável para armazenar os resultados filtrados
-    const showResult = ref(false); // Variável para controlar a exibição do resultado
-    const loading = ref(false); // Variável para controlar a exibição do spinner de carregamento
+  name: 'RandomQuotes',
 
-    // Função para pesquisar autores
+  setup() {
+    // Variáveis para armazenar os valores dos campos
+    const tags = ref('');
+    const author = ref('');
+
+    // Variável para armazenar os resultados filtrados
+    const filterResponse = ref([]);
+
+    // Variável para controlar a exibição do resultado
+    const showResult = ref(false);
+
+    // Variável para controlar a exibição do spinner de carregamento
+    const loading = ref(false);
+
+    // Função para pesquisar citações
     const search = async () => {
       try {
         // Define loading como true para mostrar o spinner de carregamento
         loading.value = true;
 
-        // Traduz o valor do campo de consulta para inglês
-        const translatedQuery = await translate(query.value, { to: 'en' });
-
-        const response = await fetchSearchQuotes({ query: translatedQuery, limit: limit });
+        const response = await fetchRandomQuotes({ tags: tags.value, author: author.value });
 
         // Filtra a resposta para manter apenas 'author' e 'content'
         filterResponse.value = response.results.map(item => {
@@ -73,7 +86,7 @@ export default {
         showResult.value = true;
 
       } catch (error) {
-        console.error('Erro ao buscar autores:', error);
+        console.error('Erro ao buscar citações:', error);
       } finally {
         // Define loading como false para esconder o spinner de carregamento
         loading.value = false;
@@ -81,9 +94,9 @@ export default {
     };
 
     // Função para copiar o texto completo (content + author) para a área de transferência
-    const copyToClipboard = async (item) => {
+    const copyToClipboard = async (quote) => {
       try {
-        const textToCopy = `${item.content} - ${item.author}`; // Adicionando o nome do autor ao final da frase
+        const textToCopy = `${quote.content} - ${quote.author}`; // Adicionando o nome do autor ao final da frase
         await navigator.clipboard.writeText(textToCopy);
         alert('Texto copiado para a área de transferência!');
       } catch (error) {
@@ -91,9 +104,10 @@ export default {
       }
     };
 
+    // Retorna as variáveis e a função para o template
     return {
-      limit,
-      query,
+      tags,
+      author,
       filterResponse,
       showResult,
       search,
