@@ -1,20 +1,33 @@
 <template>
-  <div>
-    <div class="input-group">
-      <label for="tags">Tags:</label>
-      <input type="text" id="tags" v-model="tags">
-    </div>
-    <div class="input-group">
-      <label for="author">Author:</label>
-      <input type="text" id="author" v-model="author">
-    </div>
-    <button @click="search">Pesquisar</button>
-    
-    <!-- Mostra os resultados filtrados -->
-    <div v-if="showResult">
-      <div v-for="(quote, index) in filterResponse" :key="index">
-        <p><strong>Content:</strong> {{ quote.content }}</p>
-        <p><strong>Author:</strong> {{ quote.author }}</p>
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-xl-6">
+        <div class="text-center mb-3"> <!-- Adicionando classe text-center para centralizar o conteúdo -->
+          <div class="input-group">
+            <label for="query" class="input-group-text">Consulta:</label>
+            <input type="text" id="query" class="form-control rounded-pill" v-model="query">
+          </div>
+          <button @click="search" class="btn btn-primary rounded-pill btn-sm w-25" :class="{ 'btn-loading': loading }">
+            <span v-if="!loading">Pesquisar</span>
+            <span v-else>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Pesquisando...
+            </span>
+          </button>
+        </div>
+
+        <div v-if="showResult" class="mt-3">
+          <div class="row">
+            <div v-for="(item, index) in filterResponse" :key="index" class="col-md-6 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-text"><strong>Author:</strong> {{ item.author }}</p>
+                  <p class="card-text"><strong>Content:</strong> {{ item.content }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -23,33 +36,30 @@
 <script>
 import { ref } from 'vue';
 import translate from "translate";
-import { fetchRandomQuotes } from '@/services/apiService';
+import { fetchSearchQuotes } from '../services/apiService';
 
 export default {
-  name: 'RandomQuotes',
-
+  name: 'SearchAuthors',
   setup() {
-    // Variáveis para armazenar os valores dos campos
-    const tags = ref('');
-    const author = ref('');
     const limit = ref(10); // Valor padrão para limit
+    const query = ref(''); // valor da consulta
+    const filterResponse = ref([]); // Variável para armazenar os resultados filtrados
+    const showResult = ref(false); // Variável para controlar a exibição do resultado
+    const loading = ref(false); // Variável para controlar a exibição do spinner de carregamento
 
-    // Variável para armazenar os resultados filtrados
-    const filterResponse = ref([]);
-
-    // Variável para controlar a exibição do resultado
-    const showResult = ref(false);
-
-    // Função para pesquisar citações
+    // Função para pesquisar autores
     const search = async () => {
       try {
-        // Traduz o valor do campo de tags para inglês
-        const translatedTags = await translate(tags.value, { to: 'en' });
+        // Define loading como true para mostrar o spinner de carregamento
+        loading.value = true;
 
-        const response = await fetchRandomQuotes({ limit: limit.value, tags: translatedTags, author: author.value });
+        // Traduz o valor do campo de consulta para inglês
+        const translatedQuery = await translate(query.value, { to: 'en' });
+
+        const response = await fetchSearchQuotes({ query: translatedQuery, limit: limit });
 
         // Filtra a resposta para manter apenas 'author' e 'content'
-        filterResponse.value = response.map(item => {
+        filterResponse.value = response.results.map(item => {
           return {
             author: item.author,
             content: item.content
@@ -60,18 +70,20 @@ export default {
         showResult.value = true;
 
       } catch (error) {
-        console.error('Erro ao buscar citações:', error);
+        console.error('Erro ao buscar autores:', error);
+      } finally {
+        // Define loading como false para esconder o spinner de carregamento
+        loading.value = false;
       }
     };
 
-    // Retorna as variáveis e a função para o template
     return {
-      tags,
-      author,
       limit,
+      query,
       filterResponse,
       showResult,
-      search
+      search,
+      loading
     };
   }
 };
@@ -80,5 +92,9 @@ export default {
 <style scoped>
 .input-group {
   margin-bottom: 1rem; /* Espaçamento entre os grupos de entrada */
+}
+
+.btn-loading {
+  pointer-events: none; /* Desabilita a interação do botão durante o carregamento */
 }
 </style>
