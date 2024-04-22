@@ -30,7 +30,7 @@
 
 <script>
 import { ref } from 'vue';
-import { translate } from 'vue-i18n';
+import translate from "translate";
 
   export default {
     name: 'RandomQuotes',
