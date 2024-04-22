@@ -141,7 +141,7 @@ export async function fetchSearchQuotes({query, fields, fuzzyMaxEdits, fuzzyMaxE
 
 
 // Função para buscar autores atraves de pesquisa do usuario
-export async function fetchSearchAuthors(query, autocomplete, matchTreshold, limit, page) {
+export async function fetchSearchAuthors({query, autocomplete, matchTreshold, limit, page} = {}) {
     
     const validMatchTreshold = matchTreshold >= 1 && matchTreshold <= 3 ? matchTreshold : 2; //Min: 1   Max: 3   Default: 2
     const validLimit = limit >= 0 && limit <= 150 ? limit : 20; //Min: 0   Max: 150   Default: 20
@@ -149,7 +149,7 @@ export async function fetchSearchAuthors(query, autocomplete, matchTreshold, lim
 
     const params = {
       query,
-      autocomplete,
+      autocomplete: true,
       matchTreshold: validMatchTreshold,
       limit: validLimit,
       page: validPage,
