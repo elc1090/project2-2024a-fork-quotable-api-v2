@@ -9,86 +9,74 @@
       <input type="text" id="author" v-model="author">
     </div>
     <button @click="search">Pesquisar</button>
-  </div>
-<!-- <div class="d-flex justify-content-center mt-5">
-    <div class="input-group" style="max-width: 400px;">
-      <input v-model="pesquisa" type="text" class="form-control rounded-pill" placeholder="Buscar por autor, palavra-chave ..." aria-label="Pesquisar" aria-describedby="button-addon2">
-      <button class="btn btn-outline-secondary" type="button" id="button-addon2" @click="shareOnWhatsApp">
-        <i class="bi bi-search"></i>
-      </button>
+    
+    <!-- Mostra os resultados filtrados -->
+    <div v-if="showResult">
+      <div v-for="(quote, index) in filterResponse" :key="index">
+        <p><strong>Content:</strong> {{ quote.content }}</p>
+        <p><strong>Author:</strong> {{ quote.author }}</p>
+      </div>
     </div>
-</div> -->
-    <!-- <div>
-        <button @click="shareOnInstagram">Compartilhar no Instagram</button>
-        <button @click="shareOnX">Compartilhar no X</button>
-        <button @click="shareOnFacebook">Compartilhar no Facebook</button>
-        <button @click="shareOnWhatsApp">Compartilhar no WhatsApp</button>
-        
-    </div>   -->
-
-  </template>
+  </div>
+</template>
 
 <script>
 import { ref } from 'vue';
 import translate from "translate";
+import { fetchRandomQuotes } from '@/services/apiService';
 
-  export default {
-    name: 'RandomQuotes',
+export default {
+  name: 'RandomQuotes',
 
-    setup() {
-      // Variáveis para armazenar os valores dos campos
-      const tags = ref('');
-      const author = ref('');
-      const limit = ref(10); // Valor padrão para limit
+  setup() {
+    // Variáveis para armazenar os valores dos campos
+    const tags = ref('');
+    const author = ref('');
+    const limit = ref(10); // Valor padrão para limit
 
-      // Variável para armazenar o resultado da pesquisa
-      const quotes = ref([]);
+    // Variável para armazenar o resultado da pesquisa
+    const quotes = ref([]);
 
-      // Variável para controlar a exibição do resultado
-      const showResult = ref(false);
+    // Variável para armazenar os resultados filtrados
+    const filterResponse = ref([]);
 
-      // Função para traduzir os rótulos dos campos
-      const translatedTagsLabel = translate('tagsLabel', { to: 'en' });
-      const translatedAuthorLabel = translate('authorLabel', { to: 'en' });
-      const translatedLimitLabel = translate('limitLabel', { to: 'en' });
-      const translatedSearchButton = translate('searchButton', { to: 'en' });
+    // Variável para controlar a exibição do resultado
+    const showResult = ref(false);
 
-      // Função para pesquisar citações
-      const searchQuotes = async () => {
-        try {
-          // Traduz o valor do campo de tags para inglês
-          const translatedTags = await translate(tags.value, { to: 'en' });
+    // Função para pesquisar citações
+    const search = async () => {
+      try {
+        // Traduz o valor do campo de tags para inglês
+        const translatedTags = await translate(tags.value, { to: 'en' });
 
-          // Chama a função fetchRandomListQuotes com os parâmetros informados
-          const response = await fetchRandomListQuotes({
-            tags: translatedTags,
-            author: author.value,
-            limit: limit.value
-          });
+        const response = await fetchRandomQuotes({ limit: limit.value, tags: translatedTags, author: author.value });
 
-          // Atualiza o array de citações com o resultado da pesquisa
-          quotes.value = response.results;
+        // Filtra a resposta para manter apenas 'author' e 'content'
+        filterResponse.value = response.map(item => {
+          return {
+            author: item.author,
+            content: item.content
+          };
+        });
 
-          // Define showResult como true para exibir o resultado na tela
-          showResult.value = true;
-        } catch (error) {
-          console.error('Erro ao buscar citações:', error);
-        }
+        // Define showResult como true para exibir os resultados
+        showResult.value = true;
+
+      } catch (error) {
+        console.error('Erro ao buscar citações:', error);
+      }
     };
 
-      // Retorna as variáveis e a função para o template
-      return {
-        tags,
-        author,
-        limit,
-        quotes,
-        showResult,
-        translatedTagsLabel,
-        translatedAuthorLabel,
-        translatedLimitLabel,
-        translatedSearchButton,
-        searchQuotes
-      };
+    // Retorna as variáveis e a função para o template
+    return {
+      tags,
+      author,
+      limit,
+      quotes,
+      filterResponse,
+      showResult,
+      search
+    };
   }
 };
 </script>

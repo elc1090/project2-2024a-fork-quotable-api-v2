@@ -1,0 +1,8 @@
+<!-- <div class="d-flex justify-content-center mt-5">
+    <div class="input-group" style="max-width: 400px;">
+      <input v-model="pesquisa" type="text" class="form-control rounded-pill" placeholder="Buscar por autor, palavra-chave ..." aria-label="Pesquisar" aria-describedby="button-addon2">
+      <button class="btn btn-outline-secondary" type="button" id="button-addon2" @click="shareOnWhatsApp">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+</div> -->

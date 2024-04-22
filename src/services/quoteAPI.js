@@ -7,9 +7,12 @@ translate.key = process.env.DEEPL_KEY;
 
 async function exemploFetchQuotesByAuthor() {
   try {
-    const resultado = await fetchQuotesByAuthor({ slug: 'albert-einstein' });
-    const text = await translate(resultado.results[0].bio, "pt");
+    const text = await translate("tecnologia", { from: "pt", to: "en" });
+    
     console.log(text);
+    const resultado = await fetchRandomListQuotes({ tags: "amor ou felicidade"});
+    //const text = await translate(resultado.data, "pt");
+    console.log(resultado);
   } catch (error) {
     console.error('Erro ao buscar citações por autor:', error);
   }

@@ -1,12 +1,14 @@
 <template>
   <NavBar/>
   <main>
-    
-    <RandomQuotes/>
-    <RandomListQuotes />
-    <QuotesByAuthor />
-    <SearchQuotes />
-    <SearchAuthors/>
+    <select v-model="selectedComponent">
+      <option value="RandomQuotes">RandomQuotes</option>
+      <option value="RandomListQuotes">RandomListQuotes</option>
+      <option value="QuotesByAuthor">QuotesByAuthor</option>
+      <option value="SearchQuotes">SearchQuotes</option>
+      <option value="SearchAuthors">SearchAuthors</option>
+    </select>
+    <component :is="selectedComponent" />
   </main>
 </template>
 <script>
@@ -25,6 +27,11 @@ export default{
     QuotesByAuthor,
     SearchQuotes,
     SearchAuthors,
+  },
+  data() {
+    return {
+      selectedComponent: 'RandomQuotes' // Define o componente inicial a ser mostrado
+    };
   }
 }
 </script>
