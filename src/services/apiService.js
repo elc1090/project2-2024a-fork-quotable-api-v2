@@ -1,4 +1,5 @@
 import axios from 'axios';
+import translate from "translate";
 
 const API_URL = 'https://api.quotable.io';
 
@@ -20,7 +21,9 @@ export async function fetchRandomQuotes({limit, maxLength, minLength, tags, auth
     }
 
     if (tags) {
-        params.tags = tags; //string
+        const translatedTags = await translate(tags, { from: "pt", to: 'en' });
+        params.tags = formatTags(translatedTags); //string
+        console.log(params.tags);
     }
 
     if (author) {
@@ -55,7 +58,9 @@ export async function fetchRandomListQuotes({maxLength, minLength, tags, author,
     }
 
     if (tags) {
-        params.tags = tags; //string
+        const translatedTags = await translate(tags, { from: "pt", to: 'en' });
+        params.tags = formatTags(translatedTags); //string
+        console.log(params.tags);
     }
 
     if (author) {
@@ -90,7 +95,7 @@ export async function fetchQuotesByAuthor({slug, sortBy, order, limit, page} = {
     };
 
     if (slug) { 
-        params.slug = slug; //string
+        params.slug = formatSlug(slug); //string
     }
 
     if (sortBy) {
@@ -110,8 +115,40 @@ export async function fetchQuotesByAuthor({slug, sortBy, order, limit, page} = {
     }
 }
 
+function formatText(input) {
+    // Converter para minúsculas
+    const lowerCaseText = input.toLowerCase();
+  
+    // Substituir espaços por hífens
+    const hyphenatedText = lowerCaseText.replace(/\s+/g, '-');
+  
+    // Remover caracteres especiais
+    const cleanText = hyphenatedText.replace(/[^\w-]+/g, '');
+  
+    return cleanText;
+}
+  
+function formatSlug(input) {
+    // Verificar se há vírgulas na entrada
+    if (input.includes(',')) {
+      // Dividir a entrada em palavras separadas
+      const words = input.split(/\s*,\s*/);
+  
+      // Formatar cada palavra individualmente
+      const formattedWords = words.map(word => formatText(word));
+  
+      // Unir as palavras formatadas usando o caractere de pipe (|)
+      return formattedWords.join('|');
+    } else {
+      // Se não houver vírgulas, apenas formate a entrada
+      return formatText(input);
+    }
+}
+
+
 // Função para buscar citacoes atraves de pesquisa do usuario
 export async function fetchSearchQuotes({query, fields, fuzzyMaxEdits, fuzzyMaxExpansions, limit, page} = {}) {
+    const translatedQuery = await translate(query, { from: "pt", to: 'en' });
     const validFields = fields || "content,author,tags";
     const validFuzzyMaxEdits = fuzzyMaxEdits >= 0 && fuzzyMaxEdits <= 2 ? fuzzyMaxEdits : 0; //Min: 0   Max: 2   Default: 0
     const validFuzzyMaxExpansions = fuzzyMaxExpansions >= 0 && fuzzyMaxExpansions <= 150 ? fuzzyMaxExpansions : 50; //Min: 0   Max: 150   Default: 50
@@ -119,16 +156,13 @@ export async function fetchSearchQuotes({query, fields, fuzzyMaxEdits, fuzzyMaxE
     const validPage = page >= 1 ? page: 1;
 
     const params = {
+      query: translatedQuery,
       fields: validFields, //string
       fuzzyMaxEdits: validFuzzyMaxEdits, //int
       fuzzyMaxExpansions: validFuzzyMaxExpansions, //int
       limit: validLimit, //int
       page: validPage, //int
     };
-
-    if (query) {
-        params.query = query; //string
-    }
 
     try {
         const response = await axios.get(`${API_URL}/search/quotes`, { params });
@@ -142,13 +176,13 @@ export async function fetchSearchQuotes({query, fields, fuzzyMaxEdits, fuzzyMaxE
 
 // Função para buscar autores atraves de pesquisa do usuario
 export async function fetchSearchAuthors({query, autocomplete, matchTreshold, limit, page} = {}) {
-    
+    const translatedQuery = await translate(query, { from: "pt", to: 'en' });
     const validMatchTreshold = matchTreshold >= 1 && matchTreshold <= 3 ? matchTreshold : 2; //Min: 1   Max: 3   Default: 2
     const validLimit = limit >= 0 && limit <= 150 ? limit : 20; //Min: 0   Max: 150   Default: 20
     const validPage = page >= 1 ? page: 1;
 
     const params = {
-      query,
+      query: translatedQuery,
       autocomplete: true,
       matchTreshold: validMatchTreshold,
       limit: validLimit,
@@ -161,5 +195,38 @@ export async function fetchSearchAuthors({query, autocomplete, matchTreshold, li
     } catch (error) {
         console.error('Error fetching authors by search:', error);
         throw error;
+    }
+}
+
+
+function formatTags(input) {
+    // Verificar se há palavras separadas por vírgulas ou "e"
+    if (input.includes(',') || input.includes(' and ')) {
+      // Substituir " e " por ","
+      const commaSeparated = input.replace(/\s*and\s*/g, ',');
+  
+      // Dividir a entrada em palavras separadas
+      const words = commaSeparated.split(',');
+  
+      // Formatar cada palavra individualmente
+      const formattedWords = words.map(word => formatText(word));
+  
+      // Unir as palavras formatadas usando vírgula (,) 
+      return formattedWords.join(',');
+    } else if (input.includes(' or ')) {
+      // Substituir " ou " por "|"
+      const pipeSeparated = input.replace(/\s*or\s*/g, '|');
+  
+      // Dividir a entrada em palavras separadas
+      const words = pipeSeparated.split('|');
+  
+      // Formatar cada palavra individualmente
+      const formattedWords = words.map(word => formatText(word));
+  
+      // Unir as palavras formatadas usando pipe (|)
+      return formattedWords.join('|');
+    } else {
+      // Se não houver vírgulas, "e" ou "ou", apenas formate a entrada
+      return formatText(input);
     }
 }

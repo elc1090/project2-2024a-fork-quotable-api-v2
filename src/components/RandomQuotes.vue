@@ -28,65 +28,70 @@
 
   </template>
 
-  <script>
+<script>
+import { ref } from 'vue';
+import translate from "translate";
+
   export default {
-  setup() {
-    // Variáveis para armazenar os valores dos campos
-    const tags = ref('');
-    const author = ref('');
-    const limit = ref(10); // Valor padrão para limit
+    name: 'RandomQuotes',
 
-    // Variável para armazenar o resultado da pesquisa
-    const quotes = ref([]);
+    setup() {
+      // Variáveis para armazenar os valores dos campos
+      const tags = ref('');
+      const author = ref('');
+      const limit = ref(10); // Valor padrão para limit
 
-    // Variável para controlar a exibição do resultado
-    const showResult = ref(false);
+      // Variável para armazenar o resultado da pesquisa
+      const quotes = ref([]);
 
-    // Função para traduzir os rótulos dos campos
-    const translatedTagsLabel = translate('tagsLabel', { to: 'en' });
-    const translatedAuthorLabel = translate('authorLabel', { to: 'en' });
-    const translatedLimitLabel = translate('limitLabel', { to: 'en' });
-    const translatedSearchButton = translate('searchButton', { to: 'en' });
+      // Variável para controlar a exibição do resultado
+      const showResult = ref(false);
 
-    // Função para pesquisar citações
-    const searchQuotes = async () => {
-      try {
-        // Traduz o valor do campo de tags para inglês
-        const translatedTags = await translate(tags.value, { to: 'en' });
+      // Função para traduzir os rótulos dos campos
+      const translatedTagsLabel = translate('tagsLabel', { to: 'en' });
+      const translatedAuthorLabel = translate('authorLabel', { to: 'en' });
+      const translatedLimitLabel = translate('limitLabel', { to: 'en' });
+      const translatedSearchButton = translate('searchButton', { to: 'en' });
 
-        // Chama a função fetchRandomListQuotes com os parâmetros informados
-        const response = await fetchRandomListQuotes({
-          tags: translatedTags,
-          author: author.value,
-          limit: limit.value
-        });
+      // Função para pesquisar citações
+      const searchQuotes = async () => {
+        try {
+          // Traduz o valor do campo de tags para inglês
+          const translatedTags = await translate(tags.value, { to: 'en' });
 
-        // Atualiza o array de citações com o resultado da pesquisa
-        quotes.value = response.results;
+          // Chama a função fetchRandomListQuotes com os parâmetros informados
+          const response = await fetchRandomListQuotes({
+            tags: translatedTags,
+            author: author.value,
+            limit: limit.value
+          });
 
-        // Define showResult como true para exibir o resultado na tela
-        showResult.value = true;
-      } catch (error) {
-        console.error('Erro ao buscar citações:', error);
-      }
+          // Atualiza o array de citações com o resultado da pesquisa
+          quotes.value = response.results;
+
+          // Define showResult como true para exibir o resultado na tela
+          showResult.value = true;
+        } catch (error) {
+          console.error('Erro ao buscar citações:', error);
+        }
     };
 
-    // Retorna as variáveis e a função para o template
-    return {
-      tags,
-      author,
-      limit,
-      quotes,
-      showResult,
-      translatedTagsLabel,
-      translatedAuthorLabel,
-      translatedLimitLabel,
-      translatedSearchButton,
-      searchQuotes
-    };
+      // Retorna as variáveis e a função para o template
+      return {
+        tags,
+        author,
+        limit,
+        quotes,
+        showResult,
+        translatedTagsLabel,
+        translatedAuthorLabel,
+        translatedLimitLabel,
+        translatedSearchButton,
+        searchQuotes
+      };
   }
 };
-    </script>
+</script>
 
 <style scoped>
 .input-group {

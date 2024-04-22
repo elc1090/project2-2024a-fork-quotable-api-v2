@@ -13,8 +13,8 @@
     import translate from "translate";
     import { fetchSearchAuthors } from '../services/apiService';
 
-    translate.engine = "google"; // "google", "yandex", "libre", "deepl"
-    translate.key = process.env.DEEPL_KEY;
+    // translate.engine = "google"; // "google", "yandex", "libre", "deepl"
+    // translate.key = process.env.DEEPL_KEY;
     
     export function useSearchAuthors() {
           const quotesResult = ref([]);  

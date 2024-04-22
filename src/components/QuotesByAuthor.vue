@@ -17,8 +17,8 @@ import { ref } from 'vue';
   import translate from "translate";
   import { fetchQuotesByAuthor} from '../services/apiService';
 
-  translate.engine = "google"; // "google", "yandex", "libre", "deepl"
-  translate.key = process.env.DEEPL_KEY;
+//   translate.engine = "google"; // "google", "yandex", "libre", "deepl"
+//   translate.key = process.env.DEEPL_KEY;
   
   export function useQuotesByAuthor(){
         const quotesResult = ref([]);  

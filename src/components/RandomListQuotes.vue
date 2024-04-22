@@ -14,14 +14,6 @@
       </div>
       <button @click="search">Pesquisar</button>
     </div>
-    <div v-if="quotesResult.length > 0">
-        <h2>Resultado das Citações:</h2>
-        <ul>
-          <li v-for="quote in quotesResult" :key="quote._id">
-            <p>{{ quote.name }} - {{ quote.content }}</p>
-          </li>
-        </ul>
-    </div>
   </template>
   
   <script>
@@ -29,8 +21,8 @@
   import translate from "translate";
   import { fetchRandomListQuotes } from '../services/apiService';
 
-  translate.engine = "google"; // "google", "yandex", "libre", "deepl"
-  translate.key = process.env.DEEPL_KEY;
+//   translate.engine = "google"; // "google", "yandex", "libre", "deepl"
+//   translate.key = process.env.DEEPL_KEY;
   
   export function useRandomListQuotes(){
         const quotesResult = ref([]);  

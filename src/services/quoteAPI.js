@@ -7,8 +7,10 @@ translate.key = process.env.DEEPL_KEY;
 
 async function exemploFetchQuotesByAuthor() {
   try {
-    const text = await translate("tecnologia", "en");
-    const resultado = await fetchRandomListQuotes({ tags: text});
+    const text = await translate("tecnologia", { from: "pt", to: "en" });
+    
+    console.log(text);
+    const resultado = await fetchRandomListQuotes({ tags: "amor ou felicidade"});
     //const text = await translate(resultado.data, "pt");
     console.log(resultado);
   } catch (error) {
