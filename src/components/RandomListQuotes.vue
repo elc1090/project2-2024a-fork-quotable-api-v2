@@ -1,59 +1,120 @@
 <template>
-  <div>
-    <div class="input-group">
-      <label for="tags">Tags:</label>
-      <input type="text" id="tags" v-model="tags">
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-xl-6">
+        <div class="text-center mb-3"> <!-- Adicionando classe text-center para centralizar o conteúdo -->
+          <div class="input-group mb-3">
+            <label for="tags" class="input-group-text">Tags:</label>
+            <input type="text" id="tags" class="form-control rounded-pill" v-model="tags">
+          </div>
+          <div class="input-group mb-3">
+            <label for="author" class="input-group-text">Author:</label>
+            <input type="text" id="author" class="form-control rounded-pill" v-model="author">
+          </div>
+          <div class="input-group mb-3">
+            <label for="limit" class="input-group-text">Limit:</label>
+            <input type="number" id="limit" class="form-control rounded-pill" v-model.number="limit">
+          </div>
+          <button @click="search" class="btn btn-primary rounded-pill btn-sm w-25" :class="{ 'btn-loading': loading }">
+            <span v-if="!loading">Pesquisar</span>
+            <span v-else>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Pesquisando...
+            </span>
+          </button>
+        </div>
+
+        <!-- Mostra os resultados filtrados -->
+        <div v-if="showResult" class="mt-3">
+          <div class="row">
+            <div v-for="(quote, index) in filterResponse" :key="index" class="col-md-6 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-text"><strong>Content:</strong> {{ quote.content }}</p>
+                  <p class="card-text"><strong>Author:</strong> {{ quote.author }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="input-group">
-      <label for="author">Author:</label>
-      <input type="text" id="author" v-model="author">
-    </div>
-    <div class="input-group">
-      <label for="limit">Limit:</label>
-      <input type="number" id="limit" v-model.number="limit">
-    </div>
-    <button @click="search">Pesquisar</button>
   </div>
 </template>
 
 <script>
 import { ref } from 'vue';
-import translate from "translate";
-import { fetchRandomListQuotes } from '../services/apiService';
+import { fetchRandomListQuotes } from '@/services/apiService';
 
-//   translate.engine = "google"; // "google", "yandex", "libre", "deepl"
-//   translate.key = process.env.DEEPL_KEY;
+export default {
+  name: 'RandomListQuotes',
 
-export function useRandomListQuotes(){
-      const quotesResult = ref([]);  
-      const tags = ref('');
-      const author = ref('');
-      const limit = ref(20); // Valor padrão para o limite
-     
-      const search = async () => {
-          try {
-          const translatedTags = await translate("tecnologia", { to: 'en' });  
-          console.log(translatedTags);
+  setup() {
+    // Variáveis para armazenar os valores dos campos
+    const tags = ref('');
+    const author = ref('');
+    const limit = ref(5); // Valor padrão para limit
 
-          const quotes = await fetchRandomListQuotes({
-              tags: tags.value,
-              author: author.value,
-              limit: limit.value
-          });
-          quotesResult.value = quotes.results;
-          console.log(quotes); // Faça algo com os resultados da pesquisa
-          
-          } catch (error) {
-          console.error('Erro ao pesquisar citações:', error);
-          }
+    // Variável para armazenar o resultado da pesquisa
+    const quotes = ref([]);
+
+    // Variável para armazenar os resultados filtrados
+    const filterResponse = ref([]);
+
+    // Variável para controlar a exibição do resultado
+    const showResult = ref(false);
+
+    // Variável para controlar a exibição do spinner de carregamento
+    const loading = ref(false);
+
+    // Função para pesquisar citações
+    const search = async () => {
+      try {
+        // Define loading como true para mostrar o spinner de carregamento
+        loading.value = true;
+
+        const response = await fetchRandomListQuotes({ limit: limit.value, tags: tags.value, author: author.value });
+
+        // Filtra a resposta para manter apenas 'author' e 'content'
+        filterResponse.value = response.results.map(item => {
+          return {
+            author: item.author,
+            content: item.content
+          };
+        });
+
+        // Define showResult como true para exibir os resultados
+        showResult.value = true;
+
+      } catch (error) {
+        console.error('Erro ao buscar citações:', error);
+      } finally {
+        // Define loading como false para esconder o spinner de carregamento
+        loading.value = false;
+      }
     };
 
-    return { tags, author, limit, search };
+    // Retorna as variáveis e a função para o template
+    return {
+      tags,
+      author,
+      limit,
+      quotes,
+      filterResponse,
+      showResult,
+      search,
+      loading
+    };
   }
+};
 </script>
 
 <style scoped>
 .input-group {
   margin-bottom: 1rem; /* Espaçamento entre os grupos de entrada */
+}
+
+.btn-loading {
+  pointer-events: none; /* Desabilita a interação do botão durante o carregamento */
 }
 </style>
