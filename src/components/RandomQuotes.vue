@@ -11,10 +11,6 @@
             <label for="author" class="input-group-text">Author:</label>
             <input type="text" id="author" class="form-control rounded-pill" v-model="author">
           </div>
-          <div class="input-group mb-3">
-            <label for="limit" class="input-group-text">Limit:</label>
-            <input type="number" id="limit" class="form-control rounded-pill" v-model.number="limit">
-          </div>
           <button @click="search" class="btn btn-primary rounded-pill btn-sm w-25" :class="{ 'btn-loading': loading }">
             <span v-if="!loading">Pesquisar</span>
             <span v-else>
