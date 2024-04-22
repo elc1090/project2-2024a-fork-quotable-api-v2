@@ -32,6 +32,9 @@
                 <div class="card-body">
                   <p class="card-text"><strong>Content:</strong> {{ quote.content }}</p>
                   <p class="card-text"><strong>Author:</strong> {{ quote.author }}</p>
+                  <button @click="copyToClipboard(quote)" class="btn btn-outline-secondary btn-sm float-end">
+                    <i class="fas fa-copy"></i> Copiar
+                  </button>
                 </div>
               </div>
             </div>
@@ -54,9 +57,6 @@ export default {
     const tags = ref('');
     const author = ref('');
     const limit = ref(5); // Valor padrão para limit
-
-    // Variável para armazenar o resultado da pesquisa
-    const quotes = ref([]);
 
     // Variável para armazenar os resultados filtrados
     const filterResponse = ref([]);
@@ -94,16 +94,27 @@ export default {
       }
     };
 
+    // Função para copiar o texto completo (content + author) para a área de transferência
+    const copyToClipboard = async (quote) => {
+      try {
+        const textToCopy = `${quote.content} - ${quote.author}`; // Adicionando o nome do autor ao final da frase
+        await navigator.clipboard.writeText(textToCopy);
+        alert('Texto copiado para a área de transferência!');
+      } catch (error) {
+        console.error('Erro ao copiar texto:', error);
+      }
+    };
+
     // Retorna as variáveis e a função para o template
     return {
       tags,
       author,
       limit,
-      quotes,
       filterResponse,
       showResult,
       search,
-      loading
+      loading,
+      copyToClipboard
     };
   }
 };
@@ -112,9 +123,5 @@ export default {
 <style scoped>
 .input-group {
   margin-bottom: 1rem; /* Espaçamento entre os grupos de entrada */
-}
-
-.btn-loading {
-  pointer-events: none; /* Desabilita a interação do botão durante o carregamento */
 }
 </style>

@@ -24,6 +24,9 @@
                 <div class="card-body">
                   <p class="card-text"><strong>Author:</strong> {{ item.author }}</p>
                   <p class="card-text"><strong>Content:</strong> {{ item.content }}</p>
+                  <button @click="copyToClipboard(item)" class="btn btn-outline-secondary btn-sm float-end">
+                    <i class="fas fa-copy"></i> Copiar
+                  </button>
                 </div>
               </div>
             </div>
@@ -78,13 +81,25 @@ export default {
       }
     };
 
+    // Função para copiar o texto completo (content + author) para a área de transferência
+    const copyToClipboard = async (item) => {
+      try {
+        const textToCopy = `${item.content} - ${item.author}`; // Adicionando o nome do autor ao final da frase
+        await navigator.clipboard.writeText(textToCopy);
+        alert('Texto copiado para a área de transferência!');
+      } catch (error) {
+        console.error('Erro ao copiar texto:', error);
+      }
+    };
+
     return {
       limit,
       query,
       filterResponse,
       showResult,
       search,
-      loading
+      loading,
+      copyToClipboard
     };
   }
 };
@@ -93,9 +108,5 @@ export default {
 <style scoped>
 .input-group {
   margin-bottom: 1rem; /* Espaçamento entre os grupos de entrada */
-}
-
-.btn-loading {
-  pointer-events: none; /* Desabilita a interação do botão durante o carregamento */
 }
 </style>
