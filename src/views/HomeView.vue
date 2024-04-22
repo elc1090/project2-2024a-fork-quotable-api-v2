@@ -4,7 +4,6 @@
     <select v-model="selectedComponent">
       <option value="RandomQuotes">RandomQuotes</option>
       <option value="RandomListQuotes">RandomListQuotes</option>
-      <option value="QuotesByAuthor">QuotesByAuthor</option>
       <option value="SearchQuotes">SearchQuotes</option>
       <option value="SearchAuthors">SearchAuthors</option>
     </select>
@@ -15,7 +14,6 @@
 import NavBar from '../components/NavBar.vue'
 import RandomQuotes from '../components/RandomQuotes.vue';
 import RandomListQuotes from'../components/RandomListQuotes.vue';
-import QuotesByAuthor from'../components/QuotesByAuthor.vue';
 import SearchQuotes from'../components/SearchQuotes.vue';
 import SearchAuthors from '../components/SearchAuthors.vue';
 export default{
@@ -24,7 +22,6 @@ export default{
     NavBar,
     RandomQuotes,
     RandomListQuotes,
-    QuotesByAuthor,
     SearchQuotes,
     SearchAuthors,
   },
