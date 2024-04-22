@@ -152,7 +152,8 @@ export async function fetchSearchQuotes({query, fields, fuzzyMaxEdits, fuzzyMaxE
     const validFields = fields || "content,author,tags";
     const validFuzzyMaxEdits = fuzzyMaxEdits >= 0 && fuzzyMaxEdits <= 2 ? fuzzyMaxEdits : 0; //Min: 0   Max: 2   Default: 0
     const validFuzzyMaxExpansions = fuzzyMaxExpansions >= 0 && fuzzyMaxExpansions <= 150 ? fuzzyMaxExpansions : 50; //Min: 0   Max: 150   Default: 50
-    const validLimit = limit >= 0 && limit <= 150 ? limit : 20; //Min: 0   Max: 150   Default: 20
+    const validLimit = limit >= 0 && limit <= 150 ? limit : 20; //Min: 0   Max: 150   Default: 20 arrumar issooooo
+    
     const validPage = page >= 1 ? page: 1;
 
     const params = {
