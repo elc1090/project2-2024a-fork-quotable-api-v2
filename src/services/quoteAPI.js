@@ -10,7 +10,7 @@ async function exemploFetchQuotesByAuthor() {
     const text = await translate("tecnologia", { from: "pt", to: "en" });
     
     console.log(text);
-    const resultado = await fetchRandomListQuotes({ tags: "amor ou felicidade"});
+    const resultado = await fetchRandomQuotes({ author: "Albert Einstein"});
     //const text = await translate(resultado.data, "pt");
     console.log(resultado);
   } catch (error) {

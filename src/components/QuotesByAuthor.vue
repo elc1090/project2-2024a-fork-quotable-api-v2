@@ -14,11 +14,8 @@
 
 <script>
 import { ref } from 'vue';
-  import translate from "translate";
-  import { fetchQuotesByAuthor} from '../services/apiService';
+import { fetchQuotesByAuthor} from '../services/apiService';
 
-//   translate.engine = "google"; // "google", "yandex", "libre", "deepl"
-//   translate.key = process.env.DEEPL_KEY;
   
   export function useQuotesByAuthor(){
         const quotesResult = ref([]);  
@@ -26,8 +23,7 @@ import { ref } from 'vue';
         const limit = ref(20); // Valor padrão para o limite
        
         const search = async () => {
-            try {
-            const translatedTags = await translate("tecnologia", { to: 'en' });  
+            try { 
             console.log(translatedTags);
 
             const quotes = await fetchQuotesByAuthor({
