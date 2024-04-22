@@ -183,7 +183,7 @@ export async function fetchSearchAuthors({query, autocomplete, matchTreshold, li
 
     const params = {
       query: translatedQuery,
-      autocomplete: true,
+      autocomplete: autocomplete || true,
       matchTreshold: validMatchTreshold,
       limit: validLimit,
       page: validPage,
