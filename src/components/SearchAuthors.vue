@@ -4,7 +4,7 @@
       <div class="col-lg-8 col-xl-6">
         <div class="text-center mb-3">
           <div class="input-group mb-3">
-            <label for="query" class="input-group-text">Query:</label>
+            <label for="query" class="input-group-text">Consulta:</label>
             <input type="text" id="query" class="form-control rounded-pill" v-model="query">
           </div>
           <button @click="search" class="btn btn-primary rounded-pill btn-sm w-25" :class="{ 'btn-loading': loading }">
