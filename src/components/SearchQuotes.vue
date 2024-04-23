@@ -27,6 +27,9 @@
                   <button @click="copyToClipboard(item)" class="btn btn-outline-secondary btn-sm float-end">
                     <i class="fas fa-copy"></i> Copiar
                   </button>
+                  <button @click="shareOnWhatsApp(item)" class="btn btn-outline-secondary btn-sm float-end">
+                    <i class="fab fa-whatsapp"></i> Compartilhar via WhatsApp
+                  </button>
                 </div>
               </div>
             </div>
@@ -91,6 +94,16 @@ export default {
       }
     };
 
+    const shareOnWhatsApp = async (item) => {
+      try {
+        const text = encodeURIComponent(`${item.content} - ${item.author}`);
+        const url = `https://api.whatsapp.com/send?text=${text}`;
+        window.open(url, 'Compartilhar no WhatsApp', 'width=600,height=400');
+      } catch (error) {
+        console.error('Erro ao compartilhar via WhatsApp:', error);
+      }
+    };
+
     return {
       limit,
       query,
@@ -98,7 +111,8 @@ export default {
       showResult,
       search,
       loading,
-      copyToClipboard
+      copyToClipboard,
+      shareOnWhatsApp
     };
   }
 };

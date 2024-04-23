@@ -28,8 +28,11 @@
                 <div class="card-body">
                   <p class="card-text"><strong>Conteúdo:</strong> {{ quote.content }}</p>
                   <p class="card-text"><strong>Autor:</strong> {{ quote.author }}</p>
-                  <button @click="copyToClipboard(quote)" class="btn btn-outline-secondary btn-sm float-end">
+                  <button @click="copyToClipboard(quote)" class="btn btn-outline-secondary btn-sm float-end mr-2">
                     <i class="fas fa-copy"></i> Copiar
+                  </button>
+                  <button @click="shareOnWhatsApp(quote)" class="btn btn-outline-secondary btn-sm float-end">
+                    <i class="fab fa-whatsapp"></i> Compartilhar via WhatsApp
                   </button>
                 </div>
               </div>
@@ -99,7 +102,15 @@ export default {
         console.error('Erro ao copiar texto:', error);
       }
     };
-
+    const shareOnWhatsApp= async (quote) => {
+      try {
+        const text = encodeURIComponent(`${quote.content} - ${quote.author}`);
+        const url = `https://api.whatsapp.com/send?text=${text}`;
+        window.open(url, 'Compartilhar no WhatsApp', 'width=600,height=400');
+      } catch (error) {
+        console.error('Erro ao compartilhar via WhatsApp:', error);
+      }
+    };
     // Retorna as variáveis e a função para o template
     return {
       tags,
@@ -108,7 +119,8 @@ export default {
       showResult,
       search,
       loading,
-      copyToClipboard
+      copyToClipboard,
+      shareOnWhatsApp
     };
   }
 };

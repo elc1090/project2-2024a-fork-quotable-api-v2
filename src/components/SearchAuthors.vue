@@ -26,6 +26,9 @@
                   <p class="card-text"><strong>Biografia:</strong> {{ author.bio }}</p>
                   <p class="card-text"><strong>Descrição:</strong> {{ author.description }}</p>
                   <p class="card-text"><strong>Link:</strong> <a :href="author.link" target="_blank">{{ author.link }}</a></p>
+                  <button @click="shareOnWhatsApp(author)" class="btn btn-outline-secondary btn-sm float-end">
+                    <i class="fab fa-whatsapp"></i> Compartilhar via WhatsApp
+                  </button>
                 </div>
               </div>
             </div>
@@ -80,13 +83,24 @@ export default {
       }
     };
 
+    const shareOnWhatsApp = async (author) => {
+      try {
+        const text = encodeURIComponent(`${author.name} - ${author.bio}`);
+        const url = `https://api.whatsapp.com/send?text=${text}`;
+        window.open(url, 'Compartilhar no WhatsApp', 'width=600,height=400');
+      } catch (error) {
+        console.error('Erro ao compartilhar via WhatsApp:', error);
+      }
+    };
+
     return {
       limit,
       query,
       filterResponse,
       showResult,
       search,
-      loading
+      loading,
+      shareOnWhatsApp
     };
   }
 };
