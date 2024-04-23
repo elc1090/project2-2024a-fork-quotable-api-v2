@@ -22,8 +22,8 @@
             <div v-for="(item, index) in filterResponse" :key="index" class="col-md-6 mb-3">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-text"><strong>Author:</strong> {{ item.author }}</p>
-                  <p class="card-text"><strong>Content:</strong> {{ item.content }}</p>
+                  <p class="card-text"><strong>Autor:</strong> {{ item.author }}</p>
+                  <p class="card-text"><strong>Conteúdo:</strong> {{ item.content }}</p>
                   <button @click="copyToClipboard(item)" class="btn btn-outline-secondary btn-sm float-end">
                     <i class="fas fa-copy"></i> Copiar
                   </button>
@@ -62,13 +62,12 @@ export default {
 
         const response = await fetchSearchQuotes({ query: translatedQuery, limit: limit });
 
-        // Filtra a resposta para manter apenas 'author' e 'content'
-        filterResponse.value = response.results.map(item => {
-          return {
-            author: item.author,
-            content: item.content
-          };
-        });
+        // Traduz as frases para o português
+        filterResponse.value = await Promise.all(response.results.map(async item => {
+          const author = await translate(item.author, { from: 'en', to: 'pt' });
+          const content = await translate(item.content, { from: 'en', to: 'pt' });
+          return { author, content };
+        }));
 
         // Define showResult como true para exibir os resultados
         showResult.value = true;

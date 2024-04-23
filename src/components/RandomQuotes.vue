@@ -26,8 +26,8 @@
             <div v-for="(quote, index) in filterResponse" :key="index" class="col-md-6 mb-3">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-text"><strong>Content:</strong> {{ quote.content }}</p>
-                  <p class="card-text"><strong>Author:</strong> {{ quote.author }}</p>
+                  <p class="card-text"><strong>Conteúdo:</strong> {{ quote.content }}</p>
+                  <p class="card-text"><strong>Autor:</strong> {{ quote.author }}</p>
                   <button @click="copyToClipboard(quote)" class="btn btn-outline-secondary btn-sm float-end">
                     <i class="fas fa-copy"></i> Copiar
                   </button>
@@ -43,6 +43,7 @@
 
 <script>
 import { ref } from 'vue';
+import translate from 'translate';
 import { fetchRandomQuotes } from '@/services/apiService';
 
 export default {
@@ -70,13 +71,12 @@ export default {
 
         const response = await fetchRandomQuotes({ tags: tags.value, author: author.value });
 
-        // Filtra a resposta para manter apenas 'author' e 'content'
-        filterResponse.value = response.map(item => {
-          return {
-            author: item.author,
-            content: item.content
-          };
-        });
+        // Traduz as frases para o português
+        filterResponse.value = await Promise.all(response.map(async item => {
+          const content = await translate(item.content, { from: 'en', to: 'pt' });
+          const author = await translate(item.author, { from: 'en', to: 'pt' });
+          return { content, author };
+        }));
 
         // Define showResult como true para exibir os resultados
         showResult.value = true;
@@ -117,5 +117,9 @@ export default {
 <style scoped>
 .input-group {
   margin-bottom: 1rem; /* Espaçamento entre os grupos de entrada */
+}
+.form-control {
+  border-width: 1px; /* Espessura da borda */
+  border-color: #2f94ff; /* Cor azul para a borda do select */
 }
 </style>

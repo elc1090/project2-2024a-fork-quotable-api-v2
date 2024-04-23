@@ -22,9 +22,9 @@
             <div v-for="(author, index) in filterResponse" :key="index" class="col-md-6 mb-3">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-text"><strong>Name:</strong> {{ author.name }}</p>
-                  <p class="card-text"><strong>Bio:</strong> {{ author.bio }}</p>
-                  <p class="card-text"><strong>Description:</strong> {{ author.description }}</p>
+                  <p class="card-text"><strong>Nome:</strong> {{ author.name }}</p>
+                  <p class="card-text"><strong>Biografia:</strong> {{ author.bio }}</p>
+                  <p class="card-text"><strong>Descrição:</strong> {{ author.description }}</p>
                   <p class="card-text"><strong>Link:</strong> <a :href="author.link" target="_blank">{{ author.link }}</a></p>
                 </div>
               </div>
@@ -61,15 +61,13 @@ export default {
 
         const response = await fetchSearchAuthors({ query: translatedQuery, limit: limit });
 
-        // Filtra a resposta para manter apenas 'bio', 'description', 'name' e 'link'
-        filterResponse.value = response.results.map(item => {
-          return {
-            bio: item.bio,
-            description: item.description,
-            name: item.name,
-            link: item.link
-          };
-        });
+        // Traduz as frases para o português
+        filterResponse.value = await Promise.all(response.results.map(async item => {
+          const name = await translate(item.name, { from: 'en', to: 'pt' });
+          const bio = await translate(item.bio, { from: 'en', to: 'pt' });
+          const description = await translate(item.description, { from: 'en', to: 'pt' });
+          return { name, bio, description, link: item.link };
+        }));
 
         // Define showResult como true para exibir os resultados
         showResult.value = true;
