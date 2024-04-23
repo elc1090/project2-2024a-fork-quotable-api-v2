@@ -152,7 +152,8 @@ export async function fetchSearchQuotes({query, fields, fuzzyMaxEdits, fuzzyMaxE
     const validFields = fields || "content,author,tags";
     const validFuzzyMaxEdits = fuzzyMaxEdits >= 0 && fuzzyMaxEdits <= 2 ? fuzzyMaxEdits : 0; //Min: 0   Max: 2   Default: 0
     const validFuzzyMaxExpansions = fuzzyMaxExpansions >= 0 && fuzzyMaxExpansions <= 150 ? fuzzyMaxExpansions : 50; //Min: 0   Max: 150   Default: 50
-    const validLimit = limit >= 0 && limit <= 150 ? limit : 20; //Min: 0   Max: 150   Default: 20
+    const validLimit = limit >= 0 && limit <= 150 ? limit : 20; //Min: 0   Max: 150   Default: 20 arrumar issooooo
+    
     const validPage = page >= 1 ? page: 1;
 
     const params = {
@@ -175,7 +176,7 @@ export async function fetchSearchQuotes({query, fields, fuzzyMaxEdits, fuzzyMaxE
 
 
 // Função para buscar autores atraves de pesquisa do usuario
-export async function fetchSearchAuthors({query, autocomplete, matchTreshold, limit, page} = {}) {
+export async function fetchSearchAuthors({query, matchTreshold, limit, page} = {}) {
     const translatedQuery = await translate(query, { from: "pt", to: 'en' });
     const validMatchTreshold = matchTreshold >= 1 && matchTreshold <= 3 ? matchTreshold : 2; //Min: 1   Max: 3   Default: 2
     const validLimit = limit >= 0 && limit <= 150 ? limit : 20; //Min: 0   Max: 150   Default: 20
@@ -183,7 +184,7 @@ export async function fetchSearchAuthors({query, autocomplete, matchTreshold, li
 
     const params = {
       query: translatedQuery,
-      autocomplete: autocomplete || true,
+      autocomplete: true,
       matchTreshold: validMatchTreshold,
       limit: validLimit,
       page: validPage,

@@ -1,94 +1,115 @@
 <template>
-  <div>
-    <div class="input-group">
-      <label for="tags">Tags:</label>
-      <input type="text" id="tags" v-model="tags">
-    </div>
-    <div class="input-group">
-      <label for="author">Author:</label>
-      <input type="text" id="author" v-model="author">
-    </div>
-    <button @click="search">Pesquisar</button>
-  </div>
-<!-- <div class="d-flex justify-content-center mt-5">
-    <div class="input-group" style="max-width: 400px;">
-      <input v-model="pesquisa" type="text" class="form-control rounded-pill" placeholder="Buscar por autor, palavra-chave ..." aria-label="Pesquisar" aria-describedby="button-addon2">
-      <button class="btn btn-outline-secondary" type="button" id="button-addon2" @click="shareOnWhatsApp">
-        <i class="bi bi-search"></i>
-      </button>
-    </div>
-</div> -->
-    <!-- <div>
-        <button @click="shareOnInstagram">Compartilhar no Instagram</button>
-        <button @click="shareOnX">Compartilhar no X</button>
-        <button @click="shareOnFacebook">Compartilhar no Facebook</button>
-        <button @click="shareOnWhatsApp">Compartilhar no WhatsApp</button>
-        
-    </div>   -->
+  <div class="container-fluid">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 col-xl-6">
+        <div class="text-center mb-3"> <!-- Adicionando classe text-center para centralizar o conteúdo -->
+          <div class="input-group mb-3">
+            <label for="tags" class="input-group-text">Tags:</label>
+            <input type="text" id="tags" class="form-control rounded-pill" v-model="tags">
+          </div>
+          <div class="input-group mb-3">
+            <label for="author" class="input-group-text">Author:</label>
+            <input type="text" id="author" class="form-control rounded-pill" v-model="author">
+          </div>
+          <button @click="search" class="btn btn-primary rounded-pill btn-sm w-25" :class="{ 'btn-loading': loading }">
+            <span v-if="!loading">Pesquisar</span>
+            <span v-else>
+              <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+              Pesquisando...
+            </span>
+          </button>
+        </div>
 
-  </template>
+        <!-- Mostra os resultados filtrados -->
+        <div v-if="showResult" class="mt-3">
+          <div class="row">
+            <div v-for="(quote, index) in filterResponse" :key="index" class="col-md-6 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <p class="card-text"><strong>Content:</strong> {{ quote.content }}</p>
+                  <p class="card-text"><strong>Author:</strong> {{ quote.author }}</p>
+                  <button @click="copyToClipboard(quote)" class="btn btn-outline-secondary btn-sm float-end">
+                    <i class="fas fa-copy"></i> Copiar
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <script>
 import { ref } from 'vue';
-import translate from "translate";
+import { fetchRandomQuotes } from '@/services/apiService';
 
-  export default {
-    name: 'RandomQuotes',
+export default {
+  name: 'RandomQuotes',
 
-    setup() {
-      // Variáveis para armazenar os valores dos campos
-      const tags = ref('');
-      const author = ref('');
-      const limit = ref(10); // Valor padrão para limit
+  setup() {
+    // Variáveis para armazenar os valores dos campos
+    const tags = ref('');
+    const author = ref('');
 
-      // Variável para armazenar o resultado da pesquisa
-      const quotes = ref([]);
+    // Variável para armazenar os resultados filtrados
+    const filterResponse = ref([]);
 
-      // Variável para controlar a exibição do resultado
-      const showResult = ref(false);
+    // Variável para controlar a exibição do resultado
+    const showResult = ref(false);
 
-      // Função para traduzir os rótulos dos campos
-      const translatedTagsLabel = translate('tagsLabel', { to: 'en' });
-      const translatedAuthorLabel = translate('authorLabel', { to: 'en' });
-      const translatedLimitLabel = translate('limitLabel', { to: 'en' });
-      const translatedSearchButton = translate('searchButton', { to: 'en' });
+    // Variável para controlar a exibição do spinner de carregamento
+    const loading = ref(false);
 
-      // Função para pesquisar citações
-      const searchQuotes = async () => {
-        try {
-          // Traduz o valor do campo de tags para inglês
-          const translatedTags = await translate(tags.value, { to: 'en' });
+    // Função para pesquisar citações
+    const search = async () => {
+      try {
+        // Define loading como true para mostrar o spinner de carregamento
+        loading.value = true;
 
-          // Chama a função fetchRandomListQuotes com os parâmetros informados
-          const response = await fetchRandomListQuotes({
-            tags: translatedTags,
-            author: author.value,
-            limit: limit.value
-          });
+        const response = await fetchRandomQuotes({ tags: tags.value, author: author.value });
 
-          // Atualiza o array de citações com o resultado da pesquisa
-          quotes.value = response.results;
+        // Filtra a resposta para manter apenas 'author' e 'content'
+        filterResponse.value = response.map(item => {
+          return {
+            author: item.author,
+            content: item.content
+          };
+        });
 
-          // Define showResult como true para exibir o resultado na tela
-          showResult.value = true;
-        } catch (error) {
-          console.error('Erro ao buscar citações:', error);
-        }
+        // Define showResult como true para exibir os resultados
+        showResult.value = true;
+
+      } catch (error) {
+        console.error('Erro ao buscar citações:', error);
+      } finally {
+        // Define loading como false para esconder o spinner de carregamento
+        loading.value = false;
+      }
     };
 
-      // Retorna as variáveis e a função para o template
-      return {
-        tags,
-        author,
-        limit,
-        quotes,
-        showResult,
-        translatedTagsLabel,
-        translatedAuthorLabel,
-        translatedLimitLabel,
-        translatedSearchButton,
-        searchQuotes
-      };
+    // Função para copiar o texto completo (content + author) para a área de transferência
+    const copyToClipboard = async (quote) => {
+      try {
+        const textToCopy = `${quote.content} - ${quote.author}`; // Adicionando o nome do autor ao final da frase
+        await navigator.clipboard.writeText(textToCopy);
+        alert('Texto copiado para a área de transferência!');
+      } catch (error) {
+        console.error('Erro ao copiar texto:', error);
+      }
+    };
+
+    // Retorna as variáveis e a função para o template
+    return {
+      tags,
+      author,
+      filterResponse,
+      showResult,
+      search,
+      loading,
+      copyToClipboard
+    };
   }
 };
 </script>
