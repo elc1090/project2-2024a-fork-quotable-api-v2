@@ -8,11 +8,11 @@
             <input type="text" id="tags" class="form-control rounded-pill" v-model="tags">
           </div>
           <div class="input-group mb-3">
-            <label for="author" class="input-group-text">Author:</label>
+            <label for="author" class="input-group-text">Autor:</label>
             <input type="text" id="author" class="form-control rounded-pill" v-model="author">
           </div>
           <div class="input-group mb-3">
-            <label for="limit" class="input-group-text">Limit:</label>
+            <label for="limit" class="input-group-text">Limite:</label>
             <input type="number" id="limit" class="form-control rounded-pill" v-model.number="limit">
           </div>
           <button @click="search" class="btn btn-primary rounded-pill btn-sm w-25" :class="{ 'btn-loading': loading }">
