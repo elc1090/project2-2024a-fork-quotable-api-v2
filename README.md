@@ -17,23 +17,25 @@ Luiz Felipe Cavalheiro   - Ciência da Computação
 
 Nosso projeto consiste em um site que proporciona aos usuários acesso a uma vasta coleção de citações. Com foco na temática do conhecimento, o site oferece uma plataforma intuitiva e interativa para explorar e compartilhar insights de diversas áreas do saber.
 
-#### Principais Funcionalidades:
+### Principais Funcionalidades:
 
-#### **Pesquisa Avançada de Citações:** 
+#### - Pesquisa Avançada de Citações: 
 Os usuários podem buscar citações utilizando diversos critérios, incluindo autor, tema ou frase específica. Isso permite uma experiência personalizada, adaptada aos interesses individuais de cada usuário.
 
-#### **Visualização e Compartilhamento:** 
+#### - Visualização e Compartilhamento: 
 Após realizar uma pesquisa, os usuários podem visualizar as citações encontradas em um formato limpo. Além disso, eles têm a opção de copiar a citação para a área de transferência ou compartilhá-la diretamente no Twitter ou WhatsApp. O compartilhamento é facilitado por meio de um popup que exibe a citação selecionada, pronta para ser compartilhada.
 
-#### **Interação Social:** 
+#### - Interação Social: 
 Ao permitir que os usuários compartilhem citações inspiradoras em suas redes sociais, nosso site promove a disseminação do conhecimento e estimula o diálogo entre indivíduos interessados em aprender e compartilhar ideias.
 
-#### **Interface Amigável:** 
+#### - Interface Amigável: 
 O design do site foi elaborado para oferecer uma experiência de usuário agradável. A navegação é intuitiva, garantindo que os usuários possam acessar facilmente as funcionalidades oferecidas pelo site.
 
+
+### Conhecimento
 Nosso projeto está ligado ao tema do conhecimento, pois visa facilitar o acesso a insights e reflexões provenientes de diversas fontes e áreas de conhecimento. Ao fornecer uma plataforma para a busca e compartilhamento dessas citações, incentivamos a expansão dos horizontes intelectuais dos usuários servindo para aprendizado e troca de ideias.
 
-#### API escolhida
+### API escolhida
 
 Quotable API
 URL: https://api.quotable.io
