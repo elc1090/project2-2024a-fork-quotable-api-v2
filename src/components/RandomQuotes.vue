@@ -71,7 +71,7 @@ export default {
         const response = await fetchRandomQuotes({ tags: tags.value, author: author.value });
 
         // Filtra a resposta para manter apenas 'author' e 'content'
-        filterResponse.value = response.results.map(item => {
+        filterResponse.value = response.map(item => {
           return {
             author: item.author,
             content: item.content
