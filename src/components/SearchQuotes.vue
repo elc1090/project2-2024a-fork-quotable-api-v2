@@ -108,4 +108,8 @@ export default {
 .input-group {
   margin-bottom: 1rem; /* Espaçamento entre os grupos de entrada */
 }
+.form-control {
+  border-width: 1px; /* Espessura da borda */
+  border-color: #2f94ff; /* Cor azul para a borda do select */
+}
 </style>

@@ -100,4 +100,8 @@ export default {
 .btn-loading {
   pointer-events: none; /* Desabilita a interação do botão durante o carregamento */
 }
+.form-control {
+  border-width: 1px; /* Espessura da borda */
+  border-color: #2f94ff; /* Cor azul para a borda do select */
+}
 </style>
