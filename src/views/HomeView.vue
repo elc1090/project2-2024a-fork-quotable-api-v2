@@ -1,17 +1,6 @@
 <template>
   <div class="background">
   <NavBar/>
-<<<<<<< HEAD
-  <main>
-    
-    <RandomQuotes/>
-    <RandomListQuotes />
-    <QuotesByAuthor />
-    <SearchQuotes />
-    <SearchAuthors/>
-  </main>
-</template>
-=======
   <main class="text-center">
     <select v-model="selectedComponent" class="form-select rounded-pill border-primary w-25 mt-4 mb-4 mx-auto"> <!-- Adiciona a classe mx-auto para centralizar o select horizontalmente -->
       <option value="RandomQuotes">Citações Aleatórias</option>
@@ -24,25 +13,12 @@
 </div>
 </template>
 
->>>>>>> origin/dev-anthony
 <script>
 import NavBar from '../components/NavBar.vue'
 import RandomQuotes from '../components/RandomQuotes.vue';
 import RandomListQuotes from '../components/RandomListQuotes.vue';
 import SearchQuotes from '../components/SearchQuotes.vue';
 import SearchAuthors from '../components/SearchAuthors.vue';
-<<<<<<< HEAD
-export default{
-  name: 'HomeView',
-  components:{
-    NavBar,
-    RandomQuotes,
-    RandomListQuotes,
-    QuotesByAuthor,
-    SearchQuotes,
-    SearchAuthors,
-  }
-=======
 
 export default {
   name: 'HomeView',
@@ -69,7 +45,6 @@ export default {
 
 .rounded-pill {
   border-radius: 20px; /* Borda arredondada */
->>>>>>> origin/dev-anthony
 }
 
 
