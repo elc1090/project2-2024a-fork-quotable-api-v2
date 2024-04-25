@@ -26,14 +26,19 @@
             <div v-for="(quote, index) in filterResponse" :key="index" class="col-md-6 mb-3">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-text"><strong>Conteúdo:</strong> {{ quote.content }}</p>
-                  <p class="card-text"><strong>Autor:</strong> {{ quote.author }}</p>
-                  <button @click="copyToClipboard(quote)" class="btn btn-outline-secondary btn-sm float-end mr-2">
-                    <i class="fas fa-copy"></i> Copiar
-                  </button>
-                  <button @click="shareOnWhatsApp(quote)" class="btn btn-outline-secondary btn-sm float-end">
-                    <i class="fab fa-whatsapp"></i> Compartilhar via WhatsApp
-                  </button>
+                  <p class="card-text">"{{ quote.content }}"</p>
+                  <p class="card-text"><strong>{{ quote.author }}</strong> </p>
+                  <div class="text-center"> 
+                    <button @click="shareOnWhatsApp(quote)" class="btn btn-outline-success btn-sm">
+                      <i class="fab fa-whatsapp"></i>
+                    </button>
+                    <button @click="shareOnX(quote)" class="btn btn-outline-primary btn-sm">
+                      <i class="fab fa-twitter"></i>
+                    </button>
+                    <button @click="copyToClipboard(quote)" class="btn btn-outline-secondary btn-sm">
+                      <i class="fas fa-copy"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -77,7 +82,7 @@ export default {
         // Traduz as frases para o português
         filterResponse.value = await Promise.all(response.map(async item => {
           const content = await translate(item.content, { from: 'en', to: 'pt' });
-          const author = await translate(item.author, { from: 'en', to: 'pt' });
+          const author = item.author;
           return { content, author };
         }));
 
@@ -102,13 +107,24 @@ export default {
         console.error('Erro ao copiar texto:', error);
       }
     };
-    const shareOnWhatsApp= async (quote) => {
+
+    const shareOnWhatsApp = async (quote) => {
       try {
-        const text = encodeURIComponent(`${quote.content} - ${quote.author}`);
+        const text = encodeURIComponent(`"${quote.content}" - ${quote.author}`);
         const url = `https://api.whatsapp.com/send?text=${text}`;
         window.open(url, 'Compartilhar no WhatsApp', 'width=600,height=400');
       } catch (error) {
         console.error('Erro ao compartilhar via WhatsApp:', error);
+      }
+    };
+
+    const shareOnX = async (quote) => {
+      try {
+        const text = encodeURIComponent(`"${quote.content}" - ${quote.author}`);
+        const url = `https://x.com/intent/tweet?text=${text}`;
+        window.open(url, 'Compartilhar no X', 'width=600,height=400');
+      } catch(error) {
+        console.error('Erro ao compartilhar via X:',error);
       }
     };
     // Retorna as variáveis e a função para o template
@@ -120,7 +136,8 @@ export default {
       search,
       loading,
       copyToClipboard,
-      shareOnWhatsApp
+      shareOnWhatsApp,
+      shareOnX
     };
   }
 };

@@ -1,4 +1,5 @@
 <template>
+  <div class="background">
   <NavBar/>
   <main class="text-center">
     <select v-model="selectedComponent" class="form-select rounded-pill border-primary w-25 mt-4 mb-4 mx-auto"> <!-- Adiciona a classe mx-auto para centralizar o select horizontalmente -->
@@ -9,6 +10,7 @@
     </select>
     <component :is="selectedComponent" />
   </main>
+</div>
 </template>
 
 <script>
@@ -44,4 +46,7 @@ export default {
 .rounded-pill {
   border-radius: 20px; /* Borda arredondada */
 }
+
+
+
 </style>
