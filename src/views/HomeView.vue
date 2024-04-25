@@ -1,4 +1,5 @@
 <template>
+  <div class="background">
   <NavBar/>
 <<<<<<< HEAD
   <main>
@@ -20,6 +21,7 @@
     </select>
     <component :is="selectedComponent" />
   </main>
+</div>
 </template>
 
 >>>>>>> origin/dev-anthony
@@ -69,4 +71,7 @@ export default {
   border-radius: 20px; /* Borda arredondada */
 >>>>>>> origin/dev-anthony
 }
+
+
+
 </style>

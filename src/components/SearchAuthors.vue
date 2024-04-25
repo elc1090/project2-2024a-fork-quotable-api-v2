@@ -22,10 +22,21 @@
             <div v-for="(author, index) in filterResponse" :key="index" class="col-md-6 mb-3">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-text"><strong>Name:</strong> {{ author.name }}</p>
-                  <p class="card-text"><strong>Bio:</strong> {{ author.bio }}</p>
-                  <p class="card-text"><strong>Description:</strong> {{ author.description }}</p>
-                  <p class="card-text"><strong>Link:</strong> <a :href="author.link" target="_blank">{{ author.link }}</a></p>
+                  <p class="card-text"><strong>{{ author.name }}</strong></p>
+                  <p class="card-text"><strong>Biografia:</strong> {{ author.bio }}</p>
+                  <p class="card-text"><strong>Ocupação:</strong> {{ author.description }}</p>
+                  <p class="card-text"><a :href="author.link" target="_blank">Saiba mais</a></p>
+                  <div class="text-center"> 
+                    <button @click="shareOnWhatsApp(author)" class="btn btn-outline-success btn-sm">
+                      <i class="fab fa-whatsapp"></i>
+                    </button>
+                    <button @click="shareOnX(author)" class="btn btn-outline-primary btn-sm">
+                      <i class="fab fa-twitter"></i>
+                    </button>
+                    <button @click="copyToClipboard(author)" class="btn btn-outline-secondary btn-sm">
+                      <i class="fas fa-copy"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -61,15 +72,13 @@ export default {
 
         const response = await fetchSearchAuthors({ query: translatedQuery, limit: limit });
 
-        // Filtra a resposta para manter apenas 'bio', 'description', 'name' e 'link'
-        filterResponse.value = response.results.map(item => {
-          return {
-            bio: item.bio,
-            description: item.description,
-            name: item.name,
-            link: item.link
-          };
-        });
+        // Traduz as frases para o português
+        filterResponse.value = await Promise.all(response.results.map(async item => {
+          const name = item.name;
+          const bio = await translate(item.bio, { from: 'en', to: 'pt' });
+          const description = await translate(item.description, { from: 'en', to: 'pt' });
+          return { name, bio, description, link: item.link };
+        }));
 
         // Define showResult como true para exibir os resultados
         showResult.value = true;
@@ -82,13 +91,46 @@ export default {
       }
     };
 
+    const copyToClipboard = async (author) => {
+      try {
+        const textToCopy = `${author.bio}`; // Adicionando o nome do autor ao final da frase
+        await navigator.clipboard.writeText(textToCopy);
+        alert('Texto copiado para a área de transferência!');
+      } catch (error) {
+        console.error('Erro ao copiar texto:', error);
+      }
+    };
+
+    const shareOnWhatsApp = async (author) => {
+      try {
+        const text = encodeURIComponent(`${author.name}: ${author.bio}`);
+        const url = `https://api.whatsapp.com/send?text=${text}`;
+        window.open(url, 'Compartilhar no WhatsApp', 'width=600,height=400');
+      } catch (error) {
+        console.error('Erro ao compartilhar via WhatsApp:', error);
+      }
+    };
+
+    const shareOnX = async (author) => {
+      try {
+        const text = encodeURIComponent(`${author.name}: ${author.bio}`);
+        const url = `https://x.com/intent/tweet?text=${text}`;
+        window.open(url, 'Compartilhar no X', 'width=600,height=400');
+      } catch(error) {
+        console.error('Erro ao compartilhar via X:',error);
+      }
+    };
+
     return {
       limit,
       query,
       filterResponse,
       showResult,
       search,
-      loading
+      loading,
+      copyToClipboard,
+      shareOnWhatsApp,
+      shareOnX
     };
   }
 };
@@ -101,5 +143,9 @@ export default {
 
 .btn-loading {
   pointer-events: none; /* Desabilita a interação do botão durante o carregamento */
+}
+.form-control {
+  border-width: 1px; /* Espessura da borda */
+  border-color: #2f94ff; /* Cor azul para a borda do select */
 }
 </style>

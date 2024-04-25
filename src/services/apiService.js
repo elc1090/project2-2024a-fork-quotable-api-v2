@@ -40,13 +40,12 @@ export async function fetchRandomQuotes({limit, maxLength, minLength, tags, auth
 }
 
 // Função para buscar lista citações aleatórias
-export async function fetchRandomListQuotes({maxLength, minLength, tags, author, sortBy, order, limit, page} = {}) {
+export async function fetchRandomListQuotes({maxLength, minLength, tags, author, sortBy, order, limit} = {}) {
     const validLimit = limit >= 1 && limit <= 150 ? limit : 20; //Min: 1   Max: 150   Default: 20
-    const validPage = page >= 1 ? page: 1;
+
 
     const params = {
       limit: validLimit, //int
-      page: validPage,     //int
     };
 
     if (maxLength) {
@@ -57,14 +56,17 @@ export async function fetchRandomListQuotes({maxLength, minLength, tags, author,
         params.minLength = minLength; //int
     }
 
-    if (tags) {
-        const translatedTags = await translate(tags, { from: "pt", to: 'en' });
-        params.tags = formatTags(translatedTags); //string
-        console.log(params.tags);
-    }
+    if (!tags && !author) {
+        params.page = Math.floor(Math.random() * 532) + 1; // Gera número aleatório entre 1 e 532
+    } else {
+        if (tags) {
+            const translatedTags = await translate(tags, { from: "pt", to: 'en' });
+            params.tags = formatTags(translatedTags); //string
+        }
 
-    if (author) {
-        params.author = author; //string
+        if (author) {
+            params.author = author; //string
+        }
     }
 
     if (sortBy) {
@@ -192,6 +194,17 @@ export async function fetchSearchAuthors({query, matchTreshold, limit, page} = {
 
     try {
         const response = await axios.get(`${API_URL}/search/authors`, { params });
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching authors by search:', error);
+        throw error;
+    }
+}
+
+
+export async function fetchTags() {
+    try {
+        const response = await axios.get(`${API_URL}/tags`);
         return response.data;
     } catch (error) {
         console.error('Error fetching authors by search:', error);

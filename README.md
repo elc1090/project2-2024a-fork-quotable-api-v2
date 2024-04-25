@@ -1,9 +1,9 @@
 # Projeto: Consumindo uma API pública
 
-![Substitua a imagem ao lado por um screenshot do seu projeto](https://mdswanson.com/static/chops-ux-step-4.png "Screenshot do projeto")
+![Substitua a imagem ao lado por um screenshot do seu projeto](https://github.com/elc1090/project2-2024a-anthony-e-luizfelipe-quotable-api/blob/main/img-api.png)
 
 
-Acesso: Substitua este texto pela URL de deploy do projeto
+Acesso: https://project2-2024a-anthony-e-luizfelipe-quotable-api.vercel.app/
 
 
 ### Desenvolvedores
