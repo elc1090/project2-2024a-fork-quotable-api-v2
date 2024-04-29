@@ -4,6 +4,9 @@
       <div class="col-lg-8 col-xl-6">
         <div class="text-center mb-3"> <!-- Adicionando classe text-center para centralizar o conteúdo -->
           <div class="input-group mb-3">
+            <select class="form-select" multiple aria-label="multiple select example">
+              <option v-for="(tag, i) in allTags" :key="i" class="col-md-6 mb-3">{{tag}}</option>
+            </select>
             <label for="tags" class="input-group-text">Tags:</label>
             <input type="text" id="tags" class="form-control rounded-pill" v-model="tags">
           </div>
@@ -56,12 +59,22 @@
 <script>
 import { ref } from 'vue';
 import translate from 'translate';
-import { fetchRandomListQuotes } from '@/services/apiService';
+import { fetchRandomListQuotes, fetchTags } from '@/services/apiService';
 
 export default {
   name: 'RandomListQuotes',
 
   setup() {
+    const allTags = [];
+    fetchTags().then((resp) => {
+      resp.forEach((tag) => {
+        translate(tag.name, { from: 'en', to: 'pt' }).then((res) => {
+          console.log(res);
+          allTags.push(res);
+        })
+      });
+      console.log(allTags);
+    });
     // Variáveis para armazenar os valores dos campos
     const tags = ref('');
     const author = ref('');
