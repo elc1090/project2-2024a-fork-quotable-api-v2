@@ -22,14 +22,19 @@
             <div v-for="(item, index) in filterResponse" :key="index" class="col-md-6 mb-3">
               <div class="card">
                 <div class="card-body">
-                  <p class="card-text"><strong>Autor:</strong> {{ item.author }}</p>
-                  <p class="card-text"><strong>Conteúdo:</strong> {{ item.content }}</p>
-                  <button @click="copyToClipboard(item)" class="btn btn-outline-secondary btn-sm float-end">
-                    <i class="fas fa-copy"></i> Copiar
-                  </button>
-                  <button @click="shareOnWhatsApp(item)" class="btn btn-outline-secondary btn-sm float-end">
-                    <i class="fab fa-whatsapp"></i> Compartilhar via WhatsApp
-                  </button>
+                  <p class="card-text">"{{ item.content }}"</p>
+                  <p class="card-text"><strong>{{ item.author }}</strong></p>
+                  <div class="text-center"> 
+                    <button @click="shareOnWhatsApp(item)" class="btn btn-outline-success btn-sm">
+                      <i class="fab fa-whatsapp"></i>
+                    </button>
+                    <button @click="shareOnX(item)" class="btn btn-outline-primary btn-sm">
+                      <i class="fab fa-twitter"></i>
+                    </button>
+                    <button @click="copyToClipboard(item)" class="btn btn-outline-secondary btn-sm">
+                      <i class="fas fa-copy"></i>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -67,7 +72,7 @@ export default {
 
         // Traduz as frases para o português
         filterResponse.value = await Promise.all(response.results.map(async item => {
-          const author = await translate(item.author, { from: 'en', to: 'pt' });
+          const author = item.author;
           const content = await translate(item.content, { from: 'en', to: 'pt' });
           return { author, content };
         }));
@@ -96,11 +101,21 @@ export default {
 
     const shareOnWhatsApp = async (item) => {
       try {
-        const text = encodeURIComponent(`${item.content} - ${item.author}`);
+        const text = encodeURIComponent(`"${item.content}" - ${item.author}`);
         const url = `https://api.whatsapp.com/send?text=${text}`;
         window.open(url, 'Compartilhar no WhatsApp', 'width=600,height=400');
       } catch (error) {
         console.error('Erro ao compartilhar via WhatsApp:', error);
+      }
+    };
+
+    const shareOnX = async (item) => {
+      try {
+        const text = encodeURIComponent(`"${item.content}" - ${item.author}`);
+        const url = `https://x.com/intent/tweet?text=${text}`;
+        window.open(url, 'Compartilhar no X', 'width=600,height=400');
+      } catch(error) {
+        console.error('Erro ao compartilhar via X:',error);
       }
     };
 
@@ -112,7 +127,8 @@ export default {
       search,
       loading,
       copyToClipboard,
-      shareOnWhatsApp
+      shareOnWhatsApp,
+      shareOnX
     };
   }
 };
