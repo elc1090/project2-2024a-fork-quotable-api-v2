@@ -3,11 +3,11 @@
     <div class="row justify-content-center">
       <div class="col-lg-8 col-xl-6">
         <div class="text-center mb-3"> <!-- Adicionando classe text-center para centralizar o conteúdo -->
-          <div class="input-group mb-3">
-            <label for="query" class="input-group-text">Consulta:</label>
-            <input type="text" id="query" class="form-control rounded-pill" v-model="query">
+          <div class="form-floating mb-3">
+            <input type="text" id="query" class="form-control" v-model="query">
+            <label for="query">Consulta:</label>
           </div>
-          <button @click="search" class="btn btn-primary rounded-pill btn-sm w-25" :class="{ 'btn-loading': loading }">
+          <button @click="search" class="btn btn-primary btn-sm w-25" :class="{ 'btn-loading': loading }">
             <span v-if="!loading">Pesquisar</span>
             <span v-else>
               <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -24,6 +24,9 @@
                 <div class="card-body">
                   <p class="card-text">"{{ item.content }}"</p>
                   <p class="card-text"><strong>{{ item.author }}</strong></p>
+                  <span class="badge rounded-pill text-bg-primary m-2" v-for="(tag, i) in item.tags" :key="i">
+                    {{ tag }}
+                  </span>
                   <div class="text-center"> 
                     <button @click="shareOnWhatsApp(item)" class="btn btn-outline-success btn-sm">
                       <i class="fab fa-whatsapp"></i>
@@ -52,6 +55,7 @@ import { fetchSearchQuotes } from '../services/apiService';
 
 export default {
   name: 'SearchQuotes',
+
   setup() {
     const limit = ref(10); // Valor padrão para limit
     const query = ref(''); // valor da consulta
@@ -74,7 +78,14 @@ export default {
         filterResponse.value = await Promise.all(response.results.map(async item => {
           const author = item.author;
           const content = await translate(item.content, { from: 'en', to: 'pt' });
-          return { author, content };
+          const tags = []
+          item.tags.map(async tag => {
+            await translate(tag, { from: 'en', to: 'pt' }).then(res => {
+              console.log(res)
+              if (res !== 'undefined') tags.push(res)
+            })
+          })
+          return { content, author, tags }
         }));
 
         // Define showResult como true para exibir os resultados
@@ -135,11 +146,4 @@ export default {
 </script>
 
 <style scoped>
-.input-group {
-  margin-bottom: 1rem; /* Espaçamento entre os grupos de entrada */
-}
-.form-control {
-  border-width: 1px; /* Espessura da borda */
-  border-color: #2f94ff; /* Cor azul para a borda do select */
-}
 </style>

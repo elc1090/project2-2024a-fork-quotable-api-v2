@@ -3,11 +3,11 @@
     <div class="row justify-content-center">
       <div class="col-lg-8 col-xl-6">
         <div class="text-center mb-3">
-          <div class="input-group mb-3">
-            <label for="query" class="input-group-text">Consulta:</label>
-            <input type="text" id="query" class="form-control rounded-pill" v-model="query">
+          <div class="form-floating mb-3">
+            <input type="text" id="query" class="form-control" v-model="query">
+            <label for="query">Consulta:</label>
           </div>
-          <button @click="search" class="btn btn-primary rounded-pill btn-sm w-25" :class="{ 'btn-loading': loading }">
+          <button @click="search" class="btn btn-primary btn-sm w-25" :class="{ 'btn-loading': loading }">
             <span v-if="!loading">Pesquisar</span>
             <span v-else>
               <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -137,15 +137,4 @@ export default {
 </script>
 
 <style scoped>
-.input-group {
-  margin-bottom: 1rem; /* Espaçamento entre os grupos de entrada */
-}
-
-.btn-loading {
-  pointer-events: none; /* Desabilita a interação do botão durante o carregamento */
-}
-.form-control {
-  border-width: 1px; /* Espessura da borda */
-  border-color: #2f94ff; /* Cor azul para a borda do select */
-}
 </style>

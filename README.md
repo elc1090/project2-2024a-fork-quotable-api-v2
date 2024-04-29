@@ -1,16 +1,22 @@
 # Projeto: Consumindo uma API pública
 
-![Substitua a imagem ao lado por um screenshot do seu projeto](https://github.com/elc1090/project2-2024a-anthony-e-luizfelipe-quotable-api/blob/main/img-api.png)
+(![img.png](\src\assets\img.png))
 
 
 Acesso: https://project2-2024a-anthony-e-luizfelipe-quotable-api.vercel.app/
-
+Acesso 2: 
 
 ### Desenvolvedores
 
 Anthony Carlos da Silva  - Ciência da Computação
 
 Luiz Felipe Cavalheiro   - Ciência da Computação
+
+FORK: 
+
+Bruna Caetano - Sistemas de informacao
+
+Vitoria Pizzuti - Sistemas de informacao
 
 
 ### Nosso produto

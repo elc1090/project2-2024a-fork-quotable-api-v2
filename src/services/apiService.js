@@ -21,6 +21,7 @@ export async function fetchRandomQuotes({limit, maxLength, minLength, tags, auth
     }
 
     if (tags) {
+      console.log(tags)
         const translatedTags = await translate(tags, { from: "pt", to: 'en' });
         params.tags = formatTags(translatedTags); //string
         console.log(params.tags);
@@ -214,33 +215,13 @@ export async function fetchTags() {
 
 
 function formatTags(input) {
-    // Verificar se há palavras separadas por vírgulas ou "e"
-    if (input.includes(',') || input.includes(' and ')) {
-      // Substituir " e " por ","
-      const commaSeparated = input.replace(/\s*and\s*/g, ',');
-  
-      // Dividir a entrada em palavras separadas
-      const words = commaSeparated.split(',');
-  
-      // Formatar cada palavra individualmente
-      const formattedWords = words.map(word => formatText(word));
-  
-      // Unir as palavras formatadas usando vírgula (,) 
-      return formattedWords.join(',');
-    } else if (input.includes(' or ')) {
-      // Substituir " ou " por "|"
-      const pipeSeparated = input.replace(/\s*or\s*/g, '|');
-  
-      // Dividir a entrada em palavras separadas
+   if (input.includes(',')) {
+      const pipeSeparated = input.replace(/\s*,\s*/g, '|');
       const words = pipeSeparated.split('|');
-  
-      // Formatar cada palavra individualmente
       const formattedWords = words.map(word => formatText(word));
-  
-      // Unir as palavras formatadas usando pipe (|)
+
       return formattedWords.join('|');
     } else {
-      // Se não houver vírgulas, "e" ou "ou", apenas formate a entrada
       return formatText(input);
     }
 }

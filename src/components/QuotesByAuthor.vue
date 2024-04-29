@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class="input-group">
-      <label for="slug">slug:</label>
+    <div class="form-floating">
       <input type="text" id="slug" v-model="slug">
+      <label for="slug">slug:</label>
     </div>
-    <div class="input-group">
-      <label for="limit">Limit:</label>
+    <div class="form-floating">
       <input type="number" id="limit" v-model.number="limit">
+      <label for="limit">Limit:</label>
     </div>
     <button @click="search">Pesquisar</button>
 
@@ -77,7 +77,4 @@ export default {
 </script>
 
 <style scoped>
-.input-group {
-  margin-bottom: 1rem; /* Espaçamento entre os grupos de entrada */
-}
 </style>
