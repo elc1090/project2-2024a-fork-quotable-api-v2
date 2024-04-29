@@ -4,7 +4,7 @@
 
 
 Acesso: https://project2-2024a-anthony-e-luizfelipe-quotable-api.vercel.app/
-Acesso 2: 
+Acesso 2: https://project2-2024a-fork-quotable-api-v2-2woiue6yn.vercel.app/
 
 ### Desenvolvedores
 
